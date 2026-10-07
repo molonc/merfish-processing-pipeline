@@ -181,6 +181,7 @@ class AtlasExportStage(PipelineStage):
             "PhysicalSizeXUnit": "um",
             "PhysicalSizeYUnit": "um",
             "PhysicalSizeZUnit": "um",
+            "Channel": {"Name": channel_lut.index.tolist()}
         }
         if dry_run:
             self.logger.info(f"Would Merge {len(fovs)} FOVS into {shape} volumes")
