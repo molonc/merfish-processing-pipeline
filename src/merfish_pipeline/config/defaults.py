@@ -12,6 +12,7 @@ VALID_MICROSCOPES: list[str] = ["oni", "nikon", "andor"]
 # ---------------------------------------------------------------------------
 VALID_STAGES: list[str] = [
     "index",
+    "atlas_export",
     "stitch",
     "focus_qc",
     "inspect_positions",

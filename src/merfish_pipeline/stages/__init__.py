@@ -60,6 +60,7 @@ from merfish_pipeline.stages.cell_assignment import CellAssignmentStage  # noqa:
 from merfish_pipeline.stages.barcode_qc import BarcodeQCStage  # noqa: F401
 from merfish_pipeline.stages.anndata_export import AnnDataExportStage  # noqa: F401
 from merfish_pipeline.stages.spatial_visualization import SpatialVisualizationStage  # noqa: F401
+from merfish_pipeline.stages.atlas_export import AtlasExportStage
 
 __all__ = [
     "PipelineStage",
