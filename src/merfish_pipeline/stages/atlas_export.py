@@ -9,12 +9,12 @@ import numpy as np
 import pandas as pd
 from tifffile import tifffile
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from pprint import pprint
+from shutil import copy2
+
 from merfish_pipeline.io.sheet_io import read_sheet, write_sheet
 from merfish_pipeline.stages.base import PipelineStage, StageResult
 from merfish_pipeline.stages.registry import register_stage
 from typing import Any
-from tempfile import TemporaryFile
 # ---------------------------------------------------------------------------
 # Package-level templates directory (two levels up from the ``src/`` tree)
 # ---------------------------------------------------------------------------
@@ -88,9 +88,12 @@ def merge_fov(fov, meta, manifest, shape, dtype, channel_lut):
 
 @register_stage("atlas_export")
 class AtlasExportStage(PipelineStage):
-    """Generate all MERlin parameter files (does not run MERlin)."""
+    """
+        Export Vancouver Merfish Experiment into Atlas Optimized Format --> Files Merged into (Time,Channel, Z, Y, X) stacks
+        Doing So lowers total number of files significantly --> saving costs on upload and download
+    """
 
-    description = "Generate MERlin configuration and parameter files"
+    description = " Export Vancouver Merfish Experiment into Atlas Optimized Format"    
 
     # ------------------------------------------------------------------
     # Abstract interface
@@ -113,7 +116,10 @@ class AtlasExportStage(PipelineStage):
 
     def check_outputs_exist(self) -> bool:
         """Return True if all key output files already exist."""
+            output_dir = self.get_output_dir()
 
+            if (output_dir / "atlas_export").exists():
+                return True
         return False
 
     def run(self, dry_run: bool = False) -> StageResult:
@@ -195,11 +201,13 @@ class AtlasExportStage(PipelineStage):
                         channel_lut,
                     )
                 )
-            for future in tqdm(as_completed(tasks)):
+            for future in as_completed(tasks):
                 fov = future.result()
                 self.logger.info(f"Wrote FOV {fov}")
                 output_files.append(fov)
-
+        positions_export = export_dir / position_path.name 
+        copy2(position_path, positions_export)
+        output_files.append(position_export)
         return StageResult(status="passed", output_files=output_files, error="")
 
     # ------------------------------------------------------------------
