@@ -116,10 +116,10 @@ class AtlasExportStage(PipelineStage):
 
     def check_outputs_exist(self) -> bool:
         """Return True if all key output files already exist."""
-            output_dir = self.get_output_dir()
+        output_dir = self.get_output_dir()
 
-            if (output_dir / "atlas_export").exists():
-                return True
+        if (output_dir / "atlas_export").exists():
+            return True
         return False
 
     def run(self, dry_run: bool = False) -> StageResult:
@@ -178,9 +178,9 @@ class AtlasExportStage(PipelineStage):
             "PhysicalSizeX": pixel_size,
             "PhysicalSizeY": pixel_size,
             "PhysicalSizeZ": z_step,
-            "PhysicalSizeUnitX": "um",
-            "PhysicalSizeUnitY": "um",
-            "PhysicalSizeUnitZ": "um",
+            "PhysicalSizeXUnit": "um",
+            "PhysicalSizeYUnit": "um",
+            "PhysicalSizeZUnit": "um",
         }
         if dry_run:
             self.logger.info(f"Would Merge {len(fovs)} FOVS into {shape} volumes")
