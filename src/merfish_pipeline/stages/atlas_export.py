@@ -118,7 +118,7 @@ class AtlasExportStage(PipelineStage):
         """Return True if all key output files already exist."""
         output_dir = self.get_output_dir()
 
-        if (output_dir / "atlas_export").exists():
+        if (output_dir ).exists():
             return True
         return False
 
@@ -128,7 +128,7 @@ class AtlasExportStage(PipelineStage):
         output_dir.mkdir(parents=True, exist_ok=True)
 
         xp_name = self.config.experiment.name
-        export_dir = output_dir / "atlas_export"
+        export_dir = output_dir
 
         export_dir.mkdir(parents=True, exist_ok=True)
         output_files: list[str] = []
@@ -208,7 +208,7 @@ class AtlasExportStage(PipelineStage):
                 output_files.append(fov)
         positions_export = export_dir / position_path.name 
         copy2(position_path, positions_export)
-        output_files.append(position_export)
+        output_files.append(positions_export)
         return StageResult(status="passed", output_files=output_files, error="")
 
     # ------------------------------------------------------------------
